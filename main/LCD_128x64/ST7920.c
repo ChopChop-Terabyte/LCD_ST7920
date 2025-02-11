@@ -541,8 +541,7 @@ void Screen_3(uint8_t *screen) {
     Current_screen = SCREEN_NUM_3;
 
     Clean_screen(screen);
-    Selection(screen, 0);
-    Merge_screen(screen, Frame_3);`
+    Merge_screen(screen, Frame_3);
     LCD_draw_screen(screen);
 
     Lock = 0;
