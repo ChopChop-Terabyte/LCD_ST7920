@@ -46,6 +46,7 @@
         "font_lcd_4x6.h": "c",
         "freertos.h": "c",
         "st7920.h": "c",
-        "gpio_cfg.h": "c"
+        "gpio_cfg.h": "c",
+        "mutex": "c"
     }
 }

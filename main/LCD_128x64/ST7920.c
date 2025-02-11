@@ -3,12 +3,14 @@
 char mess[100];
 
 // Lock = 1;
-uint8_t Lock = 0;
+bool Lock = 0;
 uint8_t Current_screen = SCREEN_NUM_1;
 uint8_t Screen[1024] = {[0 ... 1023] = 0x00};
 
 // For Screen 3
+bool mode = 0;
 uint8_t position = 0;
+uint8_t p_value[6] = {[0 ... 5] = 0x00};
 uint8_t p_enable[6], p_state[6], p_min[6], p_hour[6], p_mday[6], p_mon[6];
 
 i2c_master_bus_handle_t bus_handle;
@@ -293,6 +295,7 @@ void HMS(uint8_t *screen, uint8_t screen_num, uint8_t hour, uint8_t minute, uint
     LCD_draw_screen(screen);
 }
 
+/* Screen 1 */
 void Screen_1(uint8_t *screen) {
     while (Lock) vTaskDelay(1 / portTICK_PERIOD_MS);
     Lock = 1;
@@ -404,6 +407,7 @@ void Pow_per_time_set(uint8_t *screen, float p, float ph, float cos) {
     LCD_Graphic_send_text(screen, mess, 105, 55);
 }
 
+/* Screen 2 */
 void Screen_2(uint8_t *screen) {
     while (Lock) vTaskDelay(1 / portTICK_PERIOD_MS);
     Lock = 1;
@@ -529,6 +533,7 @@ void OUT_set(uint8_t *screen, uint8_t L, uint8_t st) {
     LCD_Graphic_send_text(screen, mess, x, y);
 }
 
+/* Screen 3 */
 void Screen_3(uint8_t *screen) {
     while (Lock) vTaskDelay(1 / portTICK_PERIOD_MS);
     Lock = 1;
@@ -536,46 +541,24 @@ void Screen_3(uint8_t *screen) {
     Current_screen = SCREEN_NUM_3;
 
     Clean_screen(screen);
-    LCD_Graphic_send_text(screen, "o", 2, 11);
-    Merge_screen(screen, Frame_3);
+    Selection(screen, 0);
+    Merge_screen(screen, Frame_3);`
     LCD_draw_screen(screen);
 
     Lock = 0;
     vTaskDelay(10 / portTICK_PERIOD_MS);
 }
 
-void Current_MODE(uint8_t *screen, uint8_t mode) {
-    if (mode == 0) LCD_Graphic_send_text(screen, "Auto", 56, 1);
-    else LCD_Graphic_send_text(screen, "Manu", 56, 1);
-    LCD_draw_screen(screen);
-}
-
-void Next_selection(uint8_t *screen) {
-    position = (position + 1 > 5) ? 0 : position + 1;
-    switch (position) {
-        case 1:
-            LCD_Graphic_send_text(screen, "  ", 2, 11);
-            LCD_Graphic_send_text(screen, "o", 2, 20);
-            break;
-        case 2:
-            LCD_Graphic_send_text(screen, "  ", 2, 20);
-            LCD_Graphic_send_text(screen, "o", 2, 29);
-            break;
-        case 3:
-            LCD_Graphic_send_text(screen, "  ", 2, 29);
-            LCD_Graphic_send_text(screen, "o", 2, 38);
-            break;
-        case 4:
-            LCD_Graphic_send_text(screen, "  ", 2, 38);
-            LCD_Graphic_send_text(screen, "o", 2, 47);
-            break;
-        case 5:
-            LCD_Graphic_send_text(screen, "  ", 2, 47);
-            LCD_Graphic_send_text(screen, "o", 2, 56);
-            break;
-        default:
-            LCD_Graphic_send_text(screen, "  ", 2, 56);
-            LCD_Graphic_send_text(screen, "o", 2, 11);
-            break;
+void Switch_MODE(uint8_t *screen, bool sw) {
+    if (sw) {
+        switch (mode) {
+            case 1: mode = 0; break;
+            default: mode = 1; break;
+        }
     }
+
+    if (mode) LCD_Graphic_send_text(screen, "Manu", 55, 1);
+    else LCD_Graphic_send_text(screen, "Auto", 55, 1);
+
+    LCD_draw_screen(screen);
 }

@@ -17,12 +17,10 @@
 #define GPIO_INPUT_MAP  ((1ULL << SW1) | (1ULL << SW2))
 #define GPIO_OUTPUT_MAP (1ULL << LED)
 
-// #define SSID_WIFI_STA "DaiNghia"
-// #define PASS_WIFI_STA "01020304"
-// #define SSID_WIFI_STA "HattenNeverDie"
-// #define PASS_WIFI_STA "hatten123"
-#define SSID_WIFI_STA "SkyTech"
-#define PASS_WIFI_STA "skytech2024"
+#define SSID_WIFI_STA "HattenNeverDie"
+#define PASS_WIFI_STA "hatten123"
+// #define SSID_WIFI_STA "SkyTech"
+// #define PASS_WIFI_STA "skytech2024"
 WIFI_STA_connection Wifi_z = {
     .SSID_STA = SSID_WIFI_STA,
     .PASS_STA = PASS_WIFI_STA
@@ -73,93 +71,21 @@ void Real_time() {
     vTaskDelete(NULL);
 }
 
-void Go_screen_1() {
-/* Screen 1 */
-    Screen_1(Screen);
-    Carrier_name(Screen, (uint8_t *)"MobiPhone");
-    Network_signal(Screen, 5);
-    Date_DMY(Screen, SCREEN_NUM_1, timeinfo.tm_wday, timeinfo.tm_mday, timeinfo.tm_mon + 1, timeinfo.tm_year + 1900);
-    HMS(Screen, SCREEN_NUM_1, timeinfo.tm_hour, timeinfo.tm_min, timeinfo.tm_sec);
-    Temp_hum_set(Screen, 24, 7);
-
-    /*  Group  */
-    Volt_set(Screen, 1.32, 23.68, 215.4);
-    Ampe_set(Screen, 1.32, 23.68, 215.4);
-    Pow_set(Screen, 1.32, 23.68, 215.4);
-    Pow_per_time_set(Screen, 126.32, -1.23453, 1.7);
-
-    LCD_draw_screen(Screen);
-    /*  END Group  */
-}
-
-void Go_screen_2() {
-/* Screen 2 */
-    Screen_2(Screen);
-    Date_DMY(Screen, SCREEN_NUM_2, timeinfo.tm_wday, timeinfo.tm_mday, timeinfo.tm_mon + 1, timeinfo.tm_year + 1900);
-    HMS(Screen, SCREEN_NUM_2, timeinfo.tm_hour, timeinfo.tm_min, timeinfo.tm_sec);
-
-    IN_set(Screen, 1, 1, 1);
-    IN_set(Screen, 2, 1, 0);
-    IN_set(Screen, 3, 0, 1);
-    IN_set(Screen, 4, 1, 1);
-    OUT_set(Screen, 1, 1);
-    OUT_set(Screen, 2, 0);
-    OUT_set(Screen, 3, 1);
-    OUT_set(Screen, 4, 0);
-
-    /*  Group  */
-    History_time_set(Screen, 1, 12, 30, 2, 7, 1, 2025);
-    Status_set(Screen, 1, 1);
-    History_time_set(Screen, 2, 12, 30, 2, 7, 1, 2025);
-    Status_set(Screen, 2, 0);
-    History_time_set(Screen, 3, 12, 30, 2, 7, 1, 2025);
-    Status_set(Screen, 3, 1);
-    History_time_set(Screen, 4, 12, 30, 2, 7, 1, 2025);
-    Status_set(Screen, 4, 0);
-
-    LCD_draw_screen(Screen);
-    /*  END Group  */
-
-}
-
-void Go_screen_3() {
-    Screen_3(Screen);
-    Date_DMY(Screen, SCREEN_NUM_2, timeinfo.tm_wday, timeinfo.tm_mday, timeinfo.tm_mon + 1, timeinfo.tm_year + 1900);
-    HMS(Screen, SCREEN_NUM_2, timeinfo.tm_hour, timeinfo.tm_min, timeinfo.tm_sec);
-
-    Current_MODE(Screen, 1);
-    // Current_MODE(Screen, 0);
-    vTaskDelay(1000 / portTICK_PERIOD_MS);
-    Next_selection(Screen);
-    vTaskDelay(1000 / portTICK_PERIOD_MS);
-    Next_selection(Screen);
-    vTaskDelay(1000 / portTICK_PERIOD_MS);
-    Next_selection(Screen);
-    vTaskDelay(1000 / portTICK_PERIOD_MS);
-    Next_selection(Screen);
-    vTaskDelay(1000 / portTICK_PERIOD_MS);
-    Next_selection(Screen);
-    vTaskDelay(1000 / portTICK_PERIOD_MS);
-    Next_selection(Screen);
-
-}
-
 void Switch_watching() {
-    Screen_1(Screen);
+    Screen_3(Screen);
 
     while (1) {
         if (gpio_get_level(SW1) == 0) {
             switch (Current_screen)
             {
                 case SCREEN_NUM_1:
-                    Go_screen_2(Screen);
+                    Screen_2(Screen);
                     break;
                 case SCREEN_NUM_2:
-                    Go_screen_3(Screen);
-                    // Screen_3(Screen);
+                    Screen_3(Screen);
                     break;
                 case SCREEN_NUM_3:
-                    Go_screen_1(Screen);
+                    Screen_1(Screen);
                     break;
                 default:
                     break;
@@ -187,7 +113,6 @@ void app_main(void) {
 
 /* LCD init */
     LCD_I2C_init(LCD_cfg);
-    // ESP_ERROR_CHECK(LCD_I2C_init());
     LCD_config();
     Graphic_mode_ON();
 
@@ -200,5 +125,60 @@ void app_main(void) {
 
 /* Button event */
     xTaskCreate(&Switch_watching, "Switch watching", 4 * 1024, NULL, 2, NULL);
+
+
+///////////////////////////////////////////////////////////////////////////////////////////
+/* For Screen 1 */
+//     Screen_1(Screen);
+//     Carrier_name(Screen, (uint8_t *)"MobiPhone");
+//     Network_signal(Screen, 5);
+//     Date_DMY(Screen, Current_screen, timeinfo.tm_wday, timeinfo.tm_mday, timeinfo.tm_mon + 1, timeinfo.tm_year + 1900);
+//     HMS(Screen, Current_screen, timeinfo.tm_hour, timeinfo.tm_min, timeinfo.tm_sec);
+//     Temp_hum_set(Screen, 24, 7);
+
+//     /*  Group  */
+//     Volt_set(Screen, 1.32, 23.68, 215.4);
+//     Ampe_set(Screen, 1.32, 23.68, 215.4);
+//     Pow_set(Screen, 1.32, 23.68, 215.4);
+//     Pow_per_time_set(Screen, 126.32, -1.23453, 1.7);
+
+//     LCD_draw_screen(Screen);
+//     /*  END Group  */
+
+// ///////////////////////////////////////////////////////////////////////////////////////////
+// /* For Screen 2 */
+//     Screen_2(Screen);
+//     Date_DMY(Screen, Current_screen, timeinfo.tm_wday, timeinfo.tm_mday, timeinfo.tm_mon + 1, timeinfo.tm_year + 1900);
+//     HMS(Screen, Current_screen, timeinfo.tm_hour, timeinfo.tm_min, timeinfo.tm_sec);
+
+//     IN_set(Screen, 1, 1, 1);
+//     IN_set(Screen, 2, 1, 0);
+//     IN_set(Screen, 3, 0, 1);
+//     IN_set(Screen, 4, 1, 1);
+//     OUT_set(Screen, 1, 1);
+//     OUT_set(Screen, 2, 0);
+//     OUT_set(Screen, 3, 1);
+//     OUT_set(Screen, 4, 0);
+
+//     /*  Group  */
+//     History_time_set(Screen, 1, 12, 30, 2, 7, 1, 2025);
+//     Status_set(Screen, 1, 1);
+//     History_time_set(Screen, 2, 12, 30, 2, 7, 1, 2025);
+//     Status_set(Screen, 2, 0);
+//     History_time_set(Screen, 3, 12, 30, 2, 7, 1, 2025);
+//     Status_set(Screen, 3, 1);
+//     History_time_set(Screen, 4, 12, 30, 2, 7, 1, 2025);
+//     Status_set(Screen, 4, 0);
+
+//     LCD_draw_screen(Screen);
+//     /*  END Group  */
+
+// ///////////////////////////////////////////////////////////////////////////////////////////
+// /* For Screen 3 */
+//     Screen_3(Screen);
+//     Date_DMY(Screen, Current_screen, timeinfo.tm_wday, timeinfo.tm_mday, timeinfo.tm_mon + 1, timeinfo.tm_year + 1900);
+//     HMS(Screen, Current_screen, timeinfo.tm_hour, timeinfo.tm_min, timeinfo.tm_sec);
+
+    Switch_MODE(Screen, 0);
 
 }

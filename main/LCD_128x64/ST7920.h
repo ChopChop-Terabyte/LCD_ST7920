@@ -23,12 +23,14 @@
 #define L3 3
 #define L4 4
 
-extern uint8_t Lock;
+extern bool Lock;
 extern uint8_t Current_screen;
 extern uint8_t Screen[1024];
 
 // For Screen 3
+extern bool mode;
 extern uint8_t position;
+extern uint8_t p_value[6];
 extern uint8_t p_enable[6], p_state[6], p_min[6], p_hour[6], p_mday[6], p_mon[6];
 
 typedef struct {
@@ -40,18 +42,11 @@ typedef struct {
 }LCD_config_t;
 
 void LCD_I2C_init(LCD_config_t LCD_cfg);
-// void LCD_I2C_transmit(uint16_t data);
-// void LCD_I2C_transmit_alotof_data(uint8_t *data, uint16_t len);
-// void LCD_pulse_enable(uint16_t data);
-// void LCD_write(uint8_t value, uint8_t rs);
 void Graphic_mode_ON();
 void Graphic_mode_OFF();
-// void LCD_Rotate_bitmap(const uint8_t *bitmap, uint8_t *rotate);
-// void Data_handler(uint8_t value, uint8_t *to_data, uint16_t loca, uint8_t rs);
 void LCD_draw_screen(const uint8_t *bitmap);
 void LCD_config();
 void LCD_send_text(const char *str);
-// void LCD_handle_text(uint8_t *bitmap, uint8_t x, uint8_t y, const uint8_t *font);
 void LCD_Graphic_send_text(uint8_t *screen, char *data, uint8_t x, uint8_t y);
 void Center(uint8_t *cent, float phase_1, float phase_2, float phase_3);
 void Clean_screen(uint8_t *screen);
@@ -82,10 +77,9 @@ void OUT_set(uint8_t *screen, uint8_t L, uint8_t st);
 // Screen 3
 void Screen_3(uint8_t *screen);
 /* 
-    Auto:       mode = 0
-    Manual:     mode = 1
+    mode = 0:       Print
+    mode = 1:       Switch and print
 */
-void Current_MODE(uint8_t *screen, uint8_t mode);
-void Next_selection(uint8_t *screen);
+void Switch_MODE(uint8_t *screen, bool sw);
 
 #endif // ST7920_H
