@@ -11,16 +11,16 @@
 #include "GPIO_cfg.h"
 #include "ST7920.h"
 
-#define SW1 GPIO_NUM_18
-#define SW2 GPIO_NUM_19
-#define LED GPIO_NUM_2
+#define SW1 GPIO_NUM_12
+#define SW2 GPIO_NUM_14
+#define LED GPIO_NUM_19
 #define GPIO_INPUT_MAP  ((1ULL << SW1) | (1ULL << SW2))
 #define GPIO_OUTPUT_MAP (1ULL << LED)
 
-#define SSID_WIFI_STA "HattenNeverDie"
-#define PASS_WIFI_STA "hatten123"
-// #define SSID_WIFI_STA "SkyTech"
-// #define PASS_WIFI_STA "skytech2024"
+// #define SSID_WIFI_STA "HattenNeverDie"
+// #define PASS_WIFI_STA "hatten123"
+#define SSID_WIFI_STA "SkyTech"
+#define PASS_WIFI_STA "skytech2024"
 WIFI_STA_connection Wifi_z = {
     .SSID_STA = SSID_WIFI_STA,
     .PASS_STA = PASS_WIFI_STA
@@ -28,6 +28,8 @@ WIFI_STA_connection Wifi_z = {
 
 #define SCL GPIO_NUM_22
 #define SDA GPIO_NUM_21
+// #define SCL GPIO_NUM_9
+// #define SDA GPIO_NUM_8
 #define MASTER_NUM I2C_NUM_0
 #define FREQ_HZ 500000
 #define I2C_LCD_ADDRESS 0x20
@@ -117,18 +119,21 @@ void app_main(void) {
     Graphic_mode_ON();
 
     // LOGO Skytech
-    LCD_draw_screen(Logo_Skytech);
-    vTaskDelay(2000 / portTICK_PERIOD_MS);
+    Skytechnology_logo();
+    // Clean_screen();
+    // vTaskDelay(1000 / portTICK_PERIOD_MS);
+    // LCD_draw_screen(Logo_Skytech);
+    // vTaskDelay(1000 / portTICK_PERIOD_MS);
 
 /* Real time */
-    xTaskCreate(&Real_time, "Update time every second", 3 * 1024, NULL, 1, NULL);
+    xTaskCreate(&Real_time, "Update time every second", 4 * 1024, NULL, 1, NULL);
 
 /* Button event */
     xTaskCreate(&Switch_watching, "Switch watching", 4 * 1024, NULL, 2, NULL);
 
 
 ///////////////////////////////////////////////////////////////////////////////////////////
-/* For Screen 1 */
+// /* For Screen 1 */
 //     Screen_1(Screen);
 //     Carrier_name(Screen, (uint8_t *)"MobiPhone");
 //     Network_signal(Screen, 5);
@@ -178,7 +183,7 @@ void app_main(void) {
 //     Screen_3(Screen);
 //     Date_DMY(Screen, Current_screen, timeinfo.tm_wday, timeinfo.tm_mday, timeinfo.tm_mon + 1, timeinfo.tm_year + 1900);
 //     HMS(Screen, Current_screen, timeinfo.tm_hour, timeinfo.tm_min, timeinfo.tm_sec);
-
+//     acqui, dc vao 2,3,4, RF485
     Switch_MODE(Screen, 0);
 
 }

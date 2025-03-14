@@ -49,7 +49,7 @@ void LCD_config();
 void LCD_send_text(const char *str);
 void LCD_Graphic_send_text(uint8_t *screen, char *data, uint8_t x, uint8_t y);
 void Center(uint8_t *cent, float phase_1, float phase_2, float phase_3);
-void Clean_screen(uint8_t *screen);
+void Clean_data_screen(uint8_t *screen);
 void Merge_screen(uint8_t *screen_1, const uint8_t *screen_2);
 
 void Date_DMY(uint8_t *screen, uint8_t screen_num, uint8_t day, uint8_t date, uint8_t month, uint16_t year);
@@ -81,5 +81,7 @@ void Screen_3(uint8_t *screen);
     mode = 1:       Switch and print
 */
 void Switch_MODE(uint8_t *screen, bool sw);
+
+void Skytechnology_logo(void);
 
 #endif // ST7920_H

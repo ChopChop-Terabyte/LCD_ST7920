@@ -14,6 +14,9 @@
 # EXTERNAL cache entries
 ########################
 
+//No help, variable specified on the command line.
+CCACHE_ENABLE:UNINITIALIZED=0
+
 //Path to a program.
 CMAKE_ADDR2LINE:FILEPATH=/home/ndt0012/.espressif/tools/xtensa-esp-elf/esp-13.2.0_20240530/xtensa-esp-elf/bin/xtensa-esp32-elf-addr2line
 
@@ -353,6 +356,9 @@ Mbed TLS_IS_TOP_LEVEL:STATIC=OFF
 Mbed TLS_SOURCE_DIR:STATIC=/home/ndt0012/esp/v5.3.1/esp-idf/components/mbedtls/mbedtls
 
 //No help, variable specified on the command line.
+PYTHON:UNINITIALIZED=/home/ndt0012/.espressif/python_env/idf5.3_py3.13_env/bin/python
+
+//No help, variable specified on the command line.
 PYTHON_DEPS_CHECKED:UNINITIALIZED=1
 
 //Allow unsafe builds. These builds ARE NOT SECURE.
@@ -582,17 +588,17 @@ CMAKE_VERBOSE_MAKEFILE-ADVANCED:INTERNAL=1
 //Test C_COMPILER_SUPPORTS_WFORMAT_SIGNEDNESS
 C_COMPILER_SUPPORTS_WFORMAT_SIGNEDNESS:INTERNAL=1
 //Details about finding Git
-FIND_PACKAGE_MESSAGE_DETAILS_Git:INTERNAL=[/usr/bin/git][v2.45.2()]
+FIND_PACKAGE_MESSAGE_DETAILS_Git:INTERNAL=[/usr/bin/git][v2.47.2()]
 //Details about finding Python3
-FIND_PACKAGE_MESSAGE_DETAILS_Python3:INTERNAL=[/home/ndt0012/.espressif/python_env/idf5.3_py3.12_env/bin/python][cfound components: Interpreter ][v3.12.8()]
+FIND_PACKAGE_MESSAGE_DETAILS_Python3:INTERNAL=[/home/ndt0012/.espressif/python_env/idf5.3_py3.13_env/bin/python][cfound components: Interpreter ][v3.13.2()]
 //Details about finding Threads
 FIND_PACKAGE_MESSAGE_DETAILS_Threads:INTERNAL=[TRUE][v()]
 //ADVANCED property for variable: GIT_EXECUTABLE
 GIT_EXECUTABLE-ADVANCED:INTERNAL=1
 //CMAKE_INSTALL_PREFIX during last run
 _GNUInstallDirs_LAST_CMAKE_INSTALL_PREFIX:INTERNAL=/usr/local
-_Python3_EXECUTABLE:INTERNAL=/home/ndt0012/.espressif/python_env/idf5.3_py3.12_env/bin/python
+_Python3_EXECUTABLE:INTERNAL=/home/ndt0012/.espressif/python_env/idf5.3_py3.13_env/bin/python
 //Python3 Properties
-_Python3_INTERPRETER_PROPERTIES:INTERNAL=Python;3;12;8;32;;;/usr/lib/python3.12;/usr/lib/python3.12;/home/ndt0012/.espressif/python_env/idf5.3_py3.12_env/lib/python3.12/site-packages;/home/ndt0012/.espressif/python_env/idf5.3_py3.12_env/lib/python3.12/site-packages
-_Python3_INTERPRETER_SIGNATURE:INTERNAL=14c31f19b8f962b4ed88e94b81e7ac6a
+_Python3_INTERPRETER_PROPERTIES:INTERNAL=Python;3;13;2;32;;;/usr/lib/python3.13;/usr/lib/python3.13;/home/ndt0012/.espressif/python_env/idf5.3_py3.13_env/lib/python3.13/site-packages;/home/ndt0012/.espressif/python_env/idf5.3_py3.13_env/lib/python3.13/site-packages
+_Python3_INTERPRETER_SIGNATURE:INTERNAL=30e69734a11290dbe1d75ec787c6fb89
 

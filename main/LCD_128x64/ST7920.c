@@ -1,5 +1,7 @@
 #include "ST7920.h"
 
+#define DELAY 100
+
 char mess[100];
 
 // Lock = 1;
@@ -61,6 +63,16 @@ void LCD_write(uint8_t value, uint8_t rs) {
     }
     data &= ~RW_BIT;
     LCD_pulse_enable(data);
+}
+
+void Screen_ON(void) {
+    LCD_write(0x36, 0); // Display off
+    vTaskDelay(2 / portTICK_PERIOD_MS);
+}
+
+void Screen_OFF(void) {
+    LCD_write(0x34, 0); // Display off
+    vTaskDelay(2 / portTICK_PERIOD_MS);
 }
 
 void Graphic_mode_ON() {
@@ -144,7 +156,6 @@ void LCD_config() {
     LCD_I2C_transmit(0x0001); // HIGHT xreset after >40ms
 
     Graphic_mode_ON();
-    // LCD_draw_screen(Clean);
 
     Graphic_mode_OFF();
     LCD_write(0x0C, 0); // Display on, off Cursor display
@@ -229,7 +240,7 @@ void Center(uint8_t *cent, float phase_1, float phase_2, float phase_3) {
     else cent[2] = 5;
 }
 
-void Clean_screen(uint8_t *screen) {
+void Clean_data_screen(uint8_t *screen) {
     memset(screen, 0x00, 1024 * sizeof(uint8_t));
 }
 
@@ -302,7 +313,7 @@ void Screen_1(uint8_t *screen) {
 
     Current_screen = SCREEN_NUM_1;
 
-    Clean_screen(screen);
+    Clean_data_screen(screen);
     LCD_Graphic_send_text(screen, "             XXXXXXXX                         DD/MM/YYYY", 0, 0);
     LCD_Graphic_send_text(screen, "        TT|C        HH%                         Day.  HH:MM:SS", 0, 8);
     LCD_Graphic_send_text(screen, " Phase               1                             2                             3", 0, 18);
@@ -311,7 +322,10 @@ void Screen_1(uint8_t *screen) {
     LCD_Graphic_send_text(screen, "  P(kW)", 0, 45);
     LCD_Graphic_send_text(screen, "  0.000kW    000000kWh    Cos: 0.000", 0, 55);
     Merge_screen(screen, Frame_1);
+    Screen_OFF();
     LCD_draw_screen(screen);
+    vTaskDelay(DELAY / portTICK_PERIOD_MS);
+    Screen_ON();
 
     Lock = 0;
     vTaskDelay(10 / portTICK_PERIOD_MS);
@@ -414,7 +428,7 @@ void Screen_2(uint8_t *screen) {
 
     Current_screen = SCREEN_NUM_2;
 
-    Clean_screen(screen);
+    Clean_data_screen(screen);
     LCD_Graphic_send_text(screen, "     IN", 0, 10);
     LCD_Graphic_send_text(screen, "   OUT", 0, 19);
     LCD_Graphic_send_text(screen, "   L 1", 0, 29);
@@ -422,7 +436,10 @@ void Screen_2(uint8_t *screen) {
     LCD_Graphic_send_text(screen, "   L 3", 0, 47);
     LCD_Graphic_send_text(screen, "   L 4", 0, 56);
     Merge_screen(screen, Frame_2);
+    Screen_OFF();
     LCD_draw_screen(screen);
+    vTaskDelay(DELAY / portTICK_PERIOD_MS);
+    Screen_ON();
 
     Lock = 0;
     vTaskDelay(10 / portTICK_PERIOD_MS);
@@ -540,9 +557,12 @@ void Screen_3(uint8_t *screen) {
 
     Current_screen = SCREEN_NUM_3;
 
-    Clean_screen(screen);
+    Clean_data_screen(screen);
     Merge_screen(screen, Frame_3);
+    Screen_OFF();
     LCD_draw_screen(screen);
+    vTaskDelay(DELAY / portTICK_PERIOD_MS);
+    Screen_ON();
 
     Lock = 0;
     vTaskDelay(10 / portTICK_PERIOD_MS);
@@ -560,4 +580,12 @@ void Switch_MODE(uint8_t *screen, bool sw) {
     else LCD_Graphic_send_text(screen, "Auto", 55, 1);
 
     LCD_draw_screen(screen);
+}
+
+void Skytechnology_logo(void) {
+    Screen_OFF();
+    vTaskDelay(DELAY / portTICK_PERIOD_MS);
+    LCD_draw_screen(Logo_Skytech);
+    Screen_ON();
+    vTaskDelay(2000 / portTICK_PERIOD_MS);
 }
