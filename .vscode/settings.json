@@ -48,6 +48,7 @@
         "freertos.h": "c",
         "st7920.h": "c",
         "gpio_cfg.h": "c",
-        "mutex": "c"
+        "mutex": "c",
+        "cmath": "c"
     }
 }

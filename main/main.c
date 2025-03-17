@@ -31,7 +31,7 @@ WIFI_STA_connection Wifi_z = {
 // #define SCL GPIO_NUM_9
 // #define SDA GPIO_NUM_8
 #define MASTER_NUM I2C_NUM_0
-#define FREQ_HZ 500000
+#define FREQ_HZ 400000
 #define I2C_LCD_ADDRESS 0x20
 LCD_config_t LCD_cfg = {
     .SCL_Pin = SCL,
@@ -119,17 +119,13 @@ void app_main(void) {
     Graphic_mode_ON();
 
     // LOGO Skytech
-    Skytechnology_logo();
-    // Clean_screen();
-    // vTaskDelay(1000 / portTICK_PERIOD_MS);
-    // LCD_draw_screen(Logo_Skytech);
-    // vTaskDelay(1000 / portTICK_PERIOD_MS);
+    // Skytechnology_logo();
 
 /* Real time */
-    xTaskCreate(&Real_time, "Update time every second", 4 * 1024, NULL, 1, NULL);
+    // xTaskCreate(&Real_time, "Update time every second", 4 * 1024, NULL, 1, NULL);
 
 /* Button event */
-    xTaskCreate(&Switch_watching, "Switch watching", 4 * 1024, NULL, 2, NULL);
+    // xTaskCreate(&Switch_watching, "Switch watching", 4 * 1024, NULL, 2, NULL);
 
 
 ///////////////////////////////////////////////////////////////////////////////////////////
@@ -150,7 +146,7 @@ void app_main(void) {
 //     LCD_draw_screen(Screen);
 //     /*  END Group  */
 
-// ///////////////////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////////////
 // /* For Screen 2 */
 //     Screen_2(Screen);
 //     Date_DMY(Screen, Current_screen, timeinfo.tm_wday, timeinfo.tm_mday, timeinfo.tm_mon + 1, timeinfo.tm_year + 1900);
@@ -178,12 +174,19 @@ void app_main(void) {
 //     LCD_draw_screen(Screen);
 //     /*  END Group  */
 
-// ///////////////////////////////////////////////////////////////////////////////////////////
-// /* For Screen 3 */
-//     Screen_3(Screen);
-//     Date_DMY(Screen, Current_screen, timeinfo.tm_wday, timeinfo.tm_mday, timeinfo.tm_mon + 1, timeinfo.tm_year + 1900);
-//     HMS(Screen, Current_screen, timeinfo.tm_hour, timeinfo.tm_min, timeinfo.tm_sec);
-//     acqui, dc vao 2,3,4, RF485
-    Switch_MODE(Screen, 0);
+///////////////////////////////////////////////////////////////////////////////////////////
+/* For Screen 3 */
+    Screen_3(Screen);
+    Date_DMY(Screen, Current_screen, timeinfo.tm_wday, timeinfo.tm_mday, timeinfo.tm_mon + 1, timeinfo.tm_year + 1900);
+    HMS(Screen, Current_screen, timeinfo.tm_hour, timeinfo.tm_min, timeinfo.tm_sec);
 
+    DC_set(Screen, 1234, 120, 10, -1);
+
+    RF485_status(Screen, 1);
+    vTaskDelay(1000 / portTICK_PERIOD_MS);
+    RF485_status(Screen, 0);
+
+    Switch_MODE(Screen, 0); // Print
+    vTaskDelay(1000 / portTICK_PERIOD_MS);
+    Switch_MODE(Screen, 1); // Switch and print
 }

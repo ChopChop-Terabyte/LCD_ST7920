@@ -76,6 +76,8 @@ void OUT_set(uint8_t *screen, uint8_t L, uint8_t st);
 
 // Screen 3
 void Screen_3(uint8_t *screen);
+void RF485_status(uint8_t *screen, bool st);
+void DC_set(uint8_t *screen, float dc1, float dc2, float dc3, float dc4);
 /* 
     mode = 0:       Print
     mode = 1:       Switch and print
