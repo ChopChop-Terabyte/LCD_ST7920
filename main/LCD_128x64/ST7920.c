@@ -227,17 +227,18 @@ void LCD_Graphic_send_text(uint8_t *screen, char *data, uint8_t x, uint8_t y) {
 }
 
 void Center(uint8_t *cent, float phase_1, float phase_2, float phase_3) {
-    if (phase_1 > 99.99) cent[0] = 0;
-    else if (phase_1 > 9.99) cent[0] = 2;
-    else cent[0] = 5;
+    float phases[3] = {phase_1, phase_2, phase_3};
 
-    if (phase_2 > 99.99) cent[1] = 0;
-    else if (phase_2 > 9.99) cent[1] = 2;
-    else cent[1] = 5;
-
-    if (phase_3 > 99.99) cent[2] = 0;
-    else if (phase_3 > 9.99) cent[2] = 2;
-    else cent[2] = 5;
+    for (uint8_t i = 0; i < 3; i++) {
+        if (phases[i] >= 0 && phases[i] < 10.00) cent[i] = 4;
+        else if ((phases[i] >= 10 && phases[i] < 100) ||
+                (phases[i] >= -10 && phases[i] < 0)) cent[i] = 3;
+        else if ((phases[i] >= 100 && phases[i] < 1000) ||
+                (phases[i] >= -100 && phases[i] < -10)) cent[i] = 2;
+        else if ((phases[i] >= 1000 && phases[i] < 10000) ||
+                (phases[i] >= -1000 && phases[i] < -100)) cent[i] = 1;
+        else cent[i] = 0;
+    }
 }
 
 void Clean_data_screen(uint8_t *screen) {
@@ -320,7 +321,8 @@ void Screen_1(uint8_t *screen) {
     LCD_Graphic_send_text(screen, "    U(V)", 0, 27);
     LCD_Graphic_send_text(screen, "    I(A)", 0, 36);
     LCD_Graphic_send_text(screen, "  P(kW)", 0, 45);
-    LCD_Graphic_send_text(screen, "  0.000kW    000000kWh    Cos: 0.000", 0, 55);
+    // LCD_Graphic_send_text(screen, "  0.000kW    000000kWh    Cos: 0.000", 0, 55);
+    LCD_Graphic_send_text(screen, "      Cos", 0, 55);
     Merge_screen(screen, Frame_1);
     Screen_OFF();
     LCD_draw_screen(screen);
@@ -365,12 +367,12 @@ void Set_value(uint8_t *screen, float phase_1, float phase_2, float phase_3, uin
     LCD_Graphic_send_text(screen, "                          ", 64, y);
     LCD_Graphic_send_text(screen, "                          ", 98, y);
 
-    sprintf(mess, "%3.2f", phase_1);
-    LCD_Graphic_send_text(screen, mess, 30 + cent[0], y);
-    sprintf(mess, "%3.2f", phase_2);
-    LCD_Graphic_send_text(screen, mess, 64 + cent[1], y);
-    sprintf(mess, "%3.2f", phase_3);
-    LCD_Graphic_send_text(screen, mess, 98 + cent[2], y);
+    sprintf(mess, "%.*f", cent[0], phase_1);
+    LCD_Graphic_send_text(screen, mess, 30, y);
+    sprintf(mess, "%.*f", cent[1], phase_2);
+    LCD_Graphic_send_text(screen, mess, 64, y);
+    sprintf(mess, "%.*f", cent[2], phase_3);
+    LCD_Graphic_send_text(screen, mess, 98, y);
 }
 
 void Volt_set(uint8_t *screen, float phase_1, float phase_2, float phase_3) {
@@ -391,34 +393,40 @@ void Pow_set(uint8_t *screen, float phase_1, float phase_2, float phase_3) {
     Set_value(screen, phase_1, phase_2, phase_3, cent, 45);
 }
 
-void Pow_per_time_set(uint8_t *screen, float p, float ph, float cos) {
+// void Pow_per_time_set(uint8_t *screen, float p, float ph, float cos) {
+//     uint8_t cent[3];
+
+//     LCD_Graphic_send_text(screen, "                  ", 2, 55);
+//     LCD_Graphic_send_text(screen, "                          ", 38, 55);
+//     LCD_Graphic_send_text(screen, "                     ", 104, 55);
+
+//     if (p > 999) cent[0] = 0;
+//     else if (p > 99) cent[0] = 1;
+//     else if (p > 9 || p < 0) cent[0] = 2;
+//     else cent[0] = 3;
+
+//     if (ph > 9999) cent[1] = 0;
+//     else if (ph > 999) cent[1] = 1;
+//     else if (ph > 99) cent[1] = 2;
+//     else if (ph > 9) cent[1] = 3;
+//     else if (ph < 0) cent[1] = 3;
+//     else cent[1] = 4;
+
+//     if (cos < 0) cent[2] = 2;
+//     else cent[2] = 3;
+
+//     sprintf(mess, "%.*f", cent[0], p);
+//     LCD_Graphic_send_text(screen, mess, 2, 55);
+//     sprintf(mess, "%.*f", cent[1], ph);
+//     LCD_Graphic_send_text(screen, mess, 38, 55);
+//     sprintf(mess, "%.*f", cent[2], cos);
+//     LCD_Graphic_send_text(screen, mess, 105, 55);
+// }
+
+void Cos_phi_set(uint8_t *screen, float cos1, float cos2, float cos3) {
     uint8_t cent[3];
-
-    LCD_Graphic_send_text(screen, "                  ", 2, 55);
-    LCD_Graphic_send_text(screen, "                          ", 38, 55);
-    LCD_Graphic_send_text(screen, "                     ", 104, 55);
-
-    if (p > 999) cent[0] = 0;
-    else if (p > 99) cent[0] = 1;
-    else if (p > 9 || p < 0) cent[0] = 2;
-    else cent[0] = 3;
-
-    if (ph > 9999) cent[1] = 0;
-    else if (ph > 999) cent[1] = 1;
-    else if (ph > 99) cent[1] = 2;
-    else if (ph > 9) cent[1] = 3;
-    else if (ph < 0) cent[1] = 3;
-    else cent[1] = 4;
-
-    if (cos < 0) cent[2] = 2;
-    else cent[2] = 3;
-
-    sprintf(mess, "%.*f", cent[0], p);
-    LCD_Graphic_send_text(screen, mess, 2, 55);
-    sprintf(mess, "%.*f", cent[1], ph);
-    LCD_Graphic_send_text(screen, mess, 38, 55);
-    sprintf(mess, "%.*f", cent[2], cos);
-    LCD_Graphic_send_text(screen, mess, 105, 55);
+    Center(cent, cos1, cos2, cos3);
+    Set_value(screen, cos1, cos2, cos3, cent, 55);
 }
 
 /* Screen 2 */
@@ -558,12 +566,23 @@ void Screen_3(uint8_t *screen) {
     Current_screen = SCREEN_NUM_3;
 
     Clean_data_screen(screen);
-    LCD_Graphic_send_text(screen, "DC", 2, 25);
-    LCD_Graphic_send_text(screen, "1", 25, 20);
-    LCD_Graphic_send_text(screen, "2", 54, 20);
-    LCD_Graphic_send_text(screen, "3", 83, 20);
-    LCD_Graphic_send_text(screen, "4", 112, 20);
-    LCD_Graphic_send_text(screen, "RF485:", 47, 48);
+    // LCD_Graphic_send_text(screen, "DC", 2, 25);
+    // LCD_Graphic_send_text(screen, "1", 25, 20);
+    // LCD_Graphic_send_text(screen, "2", 54, 20);
+    // LCD_Graphic_send_text(screen, "3", 83, 20);
+    // LCD_Graphic_send_text(screen, "4", 112, 20);
+    // LCD_Graphic_send_text(screen, "RF485:", 47, 48);
+
+    LCD_Graphic_send_text(screen, "ID -", 0, 0);
+    LCD_Graphic_send_text(screen, "Vi", 11, 10);
+    LCD_Graphic_send_text(screen, "Vb", 43, 10);
+    LCD_Graphic_send_text(screen, "V", 77, 10);
+    LCD_Graphic_send_text(screen, "Ir", 107, 10);
+    LCD_Graphic_send_text(screen, "A (kWh):", 2, 29);
+    LCD_Graphic_send_text(screen, "B (kWh):", 2, 38);
+    LCD_Graphic_send_text(screen, "C (kWh):", 2, 47);
+    LCD_Graphic_send_text(screen, "~ (kWh):", 2, 56);
+
     Merge_screen(screen, Frame_3);
     Screen_OFF();
     LCD_draw_screen(screen);
@@ -574,52 +593,78 @@ void Screen_3(uint8_t *screen) {
     vTaskDelay(10 / portTICK_PERIOD_MS);
 }
 
-void Switch_MODE(uint8_t *screen, bool sw) {
-    if (sw) {
-        switch (mode) {
-            case 1: mode = 0; break;
-            default: mode = 1; break;
+// void Switch_MODE(uint8_t *screen, bool sw) {
+//     if (sw) {
+//         switch (mode) {
+//             case 1: mode = 0; break;
+//             default: mode = 1; break;
+//         }
+//     }
+
+//     if (mode) LCD_Graphic_send_text(screen, "Manual", 51, 8);
+//     else LCD_Graphic_send_text(screen, "     Auto     ", 51, 8);
+
+//     LCD_draw_screen(screen);
+// }
+
+// void DC_set(uint8_t *screen, float vi, float vb, float v, float ir) {
+//     float ls[4] = {vi, vb, v, ir};
+//     uint8_t cent[4];
+
+//     for (uint8_t i = 0; i < 4; i++) {
+//         if (ls[i] >= 0 && ls[i] < 10) cent[i] = 4;
+//         else if ((ls[i] >= 10 && ls[i] < 100) ||
+//                 (ls[i] > -10 && ls[i] <= 0)) cent[i] = 3;
+//         else if ((ls[i] >= 100 && ls[i] < 1000) ||
+//                 (ls[i] > -100 && ls[i] <= 10)) cent[i] = 2;
+//         else if ((ls[i] >= 1000 && ls[i] < 10000) ||
+//                 (ls[i] > -1000 && ls[i] <= 100)) cent[i] = 1;
+//         else cent[i] = 0;
+//     }
+
+//     sprintf(mess, "%.*f", cent[0], vi);
+//     LCD_Graphic_send_text(screen, mess, 3, 19);
+//     sprintf(mess, "%.*f", cent[1], vb);
+//     LCD_Graphic_send_text(screen, mess, 35, 19);
+//     sprintf(mess, "%.*f", cent[2], v);
+//     LCD_Graphic_send_text(screen, mess, 67, 19);
+//     sprintf(mess, "%.*f", cent[3], ir);
+//     LCD_Graphic_send_text(screen, mess, 99, 19);
+// }
+
+// void RF485_status(uint8_t *screen, bool st) {
+//     if (st) LCD_Graphic_send_text(screen, "`", 78, 48);
+//     else LCD_Graphic_send_text(screen, "   ", 78, 48);
+//     LCD_draw_screen(screen);
+// }
+
+void in4(uint8_t *screen, char *id, char *ver) {
+    LCD_Graphic_send_text(screen, id, 16, 0);
+    LCD_Graphic_send_text(screen, ver, 104, 0);
+}
+
+void set_p(uint8_t *screen, float a, float b, float c, float total) {
+    float ls[4] = {a, b, c, total};
+    uint8_t x = 59, count[4] = {0}, y_ls[4] = {29, 38, 47, 56}, cat[9] = {3, 3, 3, 3, 3, 3, 2, 1, 0};
+
+    for (uint8_t i = 0; i < 4; i++){
+        int tmp = (int)ls[i];
+        if (ls[i] < 0) count[i]++;
+        while (tmp != 0) {
+            count[i]++;
+            tmp /= 10;
+        }
+
+        for (uint8_t j = 0; j < 9; j++) {
+            for (uint8_t k = 0; k < 38; k++) LCD_Graphic_send_text(screen, " ", x + k, y_ls[i]);
+
+            if (count[i] == j) {
+                sprintf(mess, "%.*f", cat[j], ls[i]);
+                LCD_Graphic_send_text(screen, mess, x, y_ls[i]);
+                break;
+            }
         }
     }
-
-    if (mode) LCD_Graphic_send_text(screen, "Manual", 51, 8);
-    else LCD_Graphic_send_text(screen, "     Auto     ", 51, 8);
-
-    LCD_draw_screen(screen);
-}
-
-void DC_set(uint8_t *screen, float dc1, float dc2, float dc3, float dc4) {
-    float ls[4] = {dc1, dc2, dc3, dc4};
-    uint8_t cent[4];
-
-    LCD_Graphic_send_text(screen, "                       ", 14, 30);
-    LCD_Graphic_send_text(screen, "                       ", 43, 30);
-    LCD_Graphic_send_text(screen, "                       ", 72, 30);
-    LCD_Graphic_send_text(screen, "                       ", 101, 30);
-
-    for (uint8_t i = 0; i < 4; i++) {
-        if (ls[i] > 9999) cent[i] = 0;
-        else if (ls[i] > 999) cent[i] = 1;
-        else if (ls[i] > 99) cent[i] = 2;
-        else if (ls[i] > 9) cent[i] = 3;
-        else if (ls[i] < 0) cent[i] = 3;
-        else cent[i] = 4;
-    }
-
-    sprintf(mess, "%.*f", cent[0], dc1);
-    LCD_Graphic_send_text(screen, mess, 14, 30);
-    sprintf(mess, "%.*f", cent[1], dc2);
-    LCD_Graphic_send_text(screen, mess, 43, 30);
-    sprintf(mess, "%.*f", cent[2], dc3);
-    LCD_Graphic_send_text(screen, mess, 72, 30);
-    sprintf(mess, "%.*f", cent[2], dc4);
-    LCD_Graphic_send_text(screen, mess, 101, 30);
-}
-
-void RF485_status(uint8_t *screen, bool st) {
-    if (st) LCD_Graphic_send_text(screen, "`", 78, 48);
-    else LCD_Graphic_send_text(screen, "   ", 78, 48);
-    LCD_draw_screen(screen);
 }
 
 void Skytechnology_logo(void) {

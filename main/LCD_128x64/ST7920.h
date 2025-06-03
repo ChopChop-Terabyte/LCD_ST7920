@@ -65,7 +65,8 @@ void Set_value(uint8_t *screen, float phase_1, float phase_2, float phase_3, uin
 void Volt_set(uint8_t *screen, float phase_1, float phase_2, float phase_3);
 void Ampe_set(uint8_t *screen, float phase_1, float phase_2, float phase_3);
 void Pow_set(uint8_t *screen, float phase_1, float phase_2, float phase_3);
-void Pow_per_time_set(uint8_t *screen, float p, float ph, float cos);
+// void Pow_per_time_set(uint8_t *screen, float p, float ph, float cos);
+void Cos_phi_set(uint8_t *screen, float cos1, float cos2, float cos3);
 
 // Screen 2
 void Screen_2(uint8_t *screen);
@@ -76,13 +77,15 @@ void OUT_set(uint8_t *screen, uint8_t L, uint8_t st);
 
 // Screen 3
 void Screen_3(uint8_t *screen);
-void RF485_status(uint8_t *screen, bool st);
-void DC_set(uint8_t *screen, float dc1, float dc2, float dc3, float dc4);
-/* 
-    mode = 0:       Print
-    mode = 1:       Switch and print
-*/
-void Switch_MODE(uint8_t *screen, bool sw);
+// /* 
+//     mode = 0:       Print
+//     mode = 1:       Switch and print
+// */
+// void Switch_MODE(uint8_t *screen, bool sw);
+// void DC_set(uint8_t *screen, float dc1, float dc2, float dc3, float dc4);
+// void RF485_status(uint8_t *screen, bool st);
+void in4(uint8_t *screen, char *id, char *ver);
+void set_p(uint8_t *screen, float a, float b, float c, float total);
 
 void Skytechnology_logo(void);
 

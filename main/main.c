@@ -111,7 +111,7 @@ void app_main(void) {
 
     GPIO_Input_init(GPIO_INPUT_MAP, 1);
     GPIO_Output_init(GPIO_OUTPUT_MAP);
-    WIFI_STA_config(Wifi_z);
+    // WIFI_STA_config(Wifi_z);
 
 /* LCD init */
     LCD_I2C_init(LCD_cfg);
@@ -141,7 +141,8 @@ void app_main(void) {
 //     Volt_set(Screen, 1.32, 23.68, 215.4);
 //     Ampe_set(Screen, 1.32, 23.68, 215.4);
 //     Pow_set(Screen, 1.32, 23.68, 215.4);
-//     Pow_per_time_set(Screen, 126.32, -1.23453, 1.7);
+//     // Pow_per_time_set(Screen, 126.32, -1.23453, 1.7);
+//     Cos_phi_set(Screen, 126.32, -1.23453, 1.7);
 
 //     LCD_draw_screen(Screen);
 //     /*  END Group  */
@@ -177,16 +178,25 @@ void app_main(void) {
 ///////////////////////////////////////////////////////////////////////////////////////////
 /* For Screen 3 */
     Screen_3(Screen);
-    Date_DMY(Screen, Current_screen, timeinfo.tm_wday, timeinfo.tm_mday, timeinfo.tm_mon + 1, timeinfo.tm_year + 1900);
-    HMS(Screen, Current_screen, timeinfo.tm_hour, timeinfo.tm_min, timeinfo.tm_sec);
+    // Date_DMY(Screen, Current_screen, timeinfo.tm_wday, timeinfo.tm_mday, timeinfo.tm_mon + 1, timeinfo.tm_year + 1900);
+    // HMS(Screen, Current_screen, timeinfo.tm_hour, timeinfo.tm_min, timeinfo.tm_sec);
 
-    DC_set(Screen, 1234, 120, 10, -1);
+    // DC_set(Screen, 1234, 120, 10, -1);
 
-    RF485_status(Screen, 1);
-    vTaskDelay(1000 / portTICK_PERIOD_MS);
-    RF485_status(Screen, 0);
+    // RF485_status(Screen, 1);
+    // vTaskDelay(1000 / portTICK_PERIOD_MS);
+    // RF485_status(Screen, 0);
 
-    Switch_MODE(Screen, 0); // Print
-    vTaskDelay(1000 / portTICK_PERIOD_MS);
-    Switch_MODE(Screen, 1); // Switch and print
+    // Switch_MODE(Screen, 0); // Print
+    // vTaskDelay(1000 / portTICK_PERIOD_MS);
+    // Switch_MODE(Screen, 1); // Switch and print
+
+    char *ID = "123456789012345";
+    char *ver = "1.0.01";
+
+    in4(Screen, ID, ver);
+    set_p(Screen, -10, -100, -1000, -10000);
+
+    LCD_draw_screen(Screen);
+
 }
