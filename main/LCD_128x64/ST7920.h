@@ -85,6 +85,7 @@ void Screen_3(uint8_t *screen);
 // void DC_set(uint8_t *screen, float dc1, float dc2, float dc3, float dc4);
 // void RF485_status(uint8_t *screen, bool st);
 void in4(uint8_t *screen, char *id, char *ver);
+void vi_vb_v_ir(uint8_t *screen, float vi, float vb, float v, float ir);
 void set_p(uint8_t *screen, float a, float b, float c, float total);
 
 void Skytechnology_logo(void);

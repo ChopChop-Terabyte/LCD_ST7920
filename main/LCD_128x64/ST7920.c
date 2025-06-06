@@ -230,13 +230,13 @@ void Center(uint8_t *cent, float phase_1, float phase_2, float phase_3) {
     float phases[3] = {phase_1, phase_2, phase_3};
 
     for (uint8_t i = 0; i < 3; i++) {
-        if (phases[i] >= 0 && phases[i] < 10.00) cent[i] = 4;
+        if (phases[i] >= 0 && phases[i] < 10) cent[i] = 4;
         else if ((phases[i] >= 10 && phases[i] < 100) ||
-                (phases[i] >= -10 && phases[i] < 0)) cent[i] = 3;
+                (phases[i] > -10 && phases[i] < 0)) cent[i] = 3;
         else if ((phases[i] >= 100 && phases[i] < 1000) ||
-                (phases[i] >= -100 && phases[i] < -10)) cent[i] = 2;
+                (phases[i] > -100 && phases[i] <= -10)) cent[i] = 2;
         else if ((phases[i] >= 1000 && phases[i] < 10000) ||
-                (phases[i] >= -1000 && phases[i] < -100)) cent[i] = 1;
+                (phases[i] > -1000 && phases[i] <= -100)) cent[i] = 1;
         else cent[i] = 0;
     }
 }
@@ -641,6 +641,25 @@ void Screen_3(uint8_t *screen) {
 void in4(uint8_t *screen, char *id, char *ver) {
     LCD_Graphic_send_text(screen, id, 16, 0);
     LCD_Graphic_send_text(screen, ver, 104, 0);
+}
+
+void vi_vb_v_ir(uint8_t *screen, float vi, float vb, float v, float ir) {
+    float ls[4] = {vi, vb, v, ir};
+    uint8_t x[4] = {3, 35, 67, 99}, cent[4] = {0};
+
+    for (uint8_t i = 0; i < 4; i++) {
+        if (ls[i] >= 0 && ls[i] < 10) cent[i] = 4;
+        else if ((ls[i] >= 10 && ls[i] < 100) ||
+                (ls[i] > -10 && ls[i] < 0)) cent[i] = 3;
+        else if ((ls[i] >= 100 && ls[i] < 1000) ||
+                (ls[i] > -100 && ls[i] <= -10)) cent[i] = 2;
+        else if ((ls[i] >= 1000 && ls[i] < 10000) ||
+                (ls[i] > -1000 && ls[i] <= -100)) cent[i] = 1;
+        else cent[i] = 0;
+
+        sprintf(mess, "%.*f", cent[i], ls[i]);
+        LCD_Graphic_send_text(screen, mess, x[i], 19);
+    }
 }
 
 void set_p(uint8_t *screen, float a, float b, float c, float total) {

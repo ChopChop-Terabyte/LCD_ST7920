@@ -195,6 +195,7 @@ void app_main(void) {
     char *ver = "1.0.01";
 
     in4(Screen, ID, ver);
+    vi_vb_v_ir(Screen, 10000, 10, 100, 1000);
     set_p(Screen, -10, -100, -1000, -10000);
 
     LCD_draw_screen(Screen);

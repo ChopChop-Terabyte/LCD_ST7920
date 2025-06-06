@@ -1,0 +1,2 @@
+source /home/ndt0012/Documents/Skytech/LCD_ST7920/build/bootloader/gdbinit/symbols
+source /home/ndt0012/Documents/Skytech/LCD_ST7920/build/bootloader/gdbinit/connect
